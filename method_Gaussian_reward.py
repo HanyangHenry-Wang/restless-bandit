@@ -35,7 +35,20 @@ def expect_reward_generator(T,lengthscale=20,variance=2,Smooth=True,Plot=True): 
 
 
 def expect_reward_generato_sin(T,period,hight,shift,Plot=True): #this function generates the expected reward 
-  
+  """
+  _summary_
+
+  Args:
+      T (_type_): _description_
+      period (_type_): _description_
+      hight (_type_): _description_
+      shift (_type_): _description_
+      Plot (bool, optional): _description_. Defaults to True.
+
+  Returns:
+      _type_: _description_
+  """  ''''''
+  ''''''  
   time = np.array(range(T))
   expected_reward = hight*np.sin((time+shift)/period)
 
@@ -369,7 +382,7 @@ def DP_pipeline(pre1, pre2, C, current_pos):
 
 
 
-def GPR_DP(T,C, step_control, arm1,arm2,lower_bound=5,):
+def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1):
 
   choice = []
   arms=[arm1,arm2]
@@ -408,14 +421,22 @@ def GPR_DP(T,C, step_control, arm1,arm2,lower_bound=5,):
     l2 = float(GP_models[1].rbf.lengthscale)
 
     sample_TS=[]
-    future_step = int(min(max(lower_bound,l1),max(lower_bound,l2)))+step_control
+    future_step = int(min(max(5,l1),max(5,l2)))+step_control
+    
 
     for i in range(K):
       X = np.array(range(t,min(t+future_step,T+1))).reshape(-1,1) ##################
       #print(X[0])
       temp = GP_models[i].posterior_samples_f(X,size=1).reshape(-1)
       #print(temp)
-      sample_TS.append(temp)
+      
+      df=np.ones(len(temp))
+      for j in range(len(temp)):
+        df[j]=discount_factor**j
+      
+      #print(df)
+      
+      sample_TS.append(df*temp)
 
     if t==0:
       path = DP_pipeline(sample_TS[0], sample_TS[1], 0 , 1) #the first choice does not cost anything
