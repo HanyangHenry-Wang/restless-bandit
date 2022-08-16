@@ -6,7 +6,21 @@ import math
 
 
 def expect_reward_generator(T,lengthscale=20,variance=2,Smooth=True,Plot=True): #this function generates the expected reward 
-  
+  ''''''
+  """_summary_
+
+  Args:
+      T (int): total time steps
+      lengthscale (float,optional): _description_. Defaults to 20.
+      variance (float, optional): _description_. Defaults to 2.
+      Smooth (bool, optional): _description_. Defaults to True.
+      Plot (bool, optional): _description_. Defaults to True.
+
+  Returns:
+      array:  return the bandit prceoss
+  """  
+
+  ''''''
   if Smooth:
 
     X_sample=np.array([[0.0]])
