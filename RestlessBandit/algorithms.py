@@ -24,6 +24,13 @@ def BM_calibration(round_holder,reward_holder,sigma=0.1):
 
 
 def EF(T, *arms):
+  ''''''
+  """_summary_
+
+  Returns:
+      _type_: _description_
+  """  
+  ''''''
 
   K = len(arms)
   max_reward = np.maximum.reduce(arms)
