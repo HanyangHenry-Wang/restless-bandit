@@ -1,9 +1,8 @@
 import numpy as np
-from matplotlib import pyplot as plt
 import matplotlib;matplotlib.rcParams['figure.figsize'] = (8,5)
 import GPy
 import math
-from RestlessBandit.arm_generator import reward_generator
+from restless_bandit.arm_generator import reward_generator
 
 
 

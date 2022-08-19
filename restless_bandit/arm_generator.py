@@ -51,11 +51,11 @@ def expect_reward_generato_sin(T,period,hight,shift,Plot=True): #this function g
   _summary_
 
   Args:
-      T (_type_): _description_
-      period (_type_): _description_
-      hight (_type_): _description_
-      shift (_type_): _description_
-      Plot (bool, optional): _description_. Defaults to True.
+      T (int): _description_
+      period (float): one parameter in the sin function
+      hight (float): one parameter in the sin function
+      shift (float): one parameter in the sin function
+      Plot (bool, optional): whether to plot the arm process. Defaults to True.
 
   Returns:
       _type_: _description_
