@@ -2,7 +2,7 @@ from restless_bandit.algorithms import *
 from restless_bandit.arm_generator import *
 
 
-def experiment2(C):
+def experiment2(C=2):
     
     df = [0.5,0.1]
     

@@ -317,7 +317,7 @@ def DP_pipeline(pre1, pre2, C, current_pos):
 
 
 
-def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1):
+def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
 
   choice = []
   arms=[arm1,arm2]
@@ -362,7 +362,13 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1):
     for i in range(K):
       X = np.array(range(t,min(t+future_step,T+1))).reshape(-1,1) ##################
       #print(X[0])
-      temp = GP_models[i].posterior_samples_f(X,size=1).reshape(-1)
+      if TS is True:
+        temp = GP_models[i].posterior_samples_f(X,size=1).reshape(-1)
+       
+      else:
+        temp,_ = GP_models[i].predict(X)
+        temp = temp.reshape(-1)
+        
       #print(temp)
       
       df=np.ones(len(temp))
