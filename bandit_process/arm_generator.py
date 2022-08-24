@@ -6,7 +6,7 @@ import math
 
 
 def expect_reward_generator(T,lengthscale=20,variance=2,Smooth=True,Plot=True): #this function generates the expected reward 
-  ''''''
+  
   """_summary_
 
   Args:
@@ -20,7 +20,7 @@ def expect_reward_generator(T,lengthscale=20,variance=2,Smooth=True,Plot=True): 
       array:  return the bandit prceoss
   """  
 
-  ''''''
+ 
   if Smooth:
 
     X_sample=np.array([[0.0]])
@@ -58,7 +58,7 @@ def expect_reward_generato_sin(T,period,hight,shift,Plot=True): #this function g
       Plot (bool, optional): whether to plot the arm process. Defaults to True.
 
   Returns:
-      _type_: _description_
+      _array:  return the bandit prceoss
   """  ''''''
   ''''''  
   time = np.array(range(T))

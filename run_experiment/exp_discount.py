@@ -1,5 +1,5 @@
-from restless_bandit.algorithms import * 
-from restless_bandit.arm_generator import *
+from algorithm.algorithms import * 
+from bandit_process.arm_generator import *
 
 
 def experiment2(C=2):

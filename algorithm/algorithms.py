@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib;matplotlib.rcParams['figure.figsize'] = (8,5)
 import GPy
 import math
-from restless_bandit.arm_generator import reward_generator
+from bandit_process.arm_generator import reward_generator
 
 
 
@@ -384,7 +384,8 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
       #print(path)
       next_pull = path[0]
     else:
-      path = DP_pipeline(sample_TS[0], sample_TS[1], C , choice[-1]) #the first choice does not cost anything
+      path = DP_pipeline(sample_TS[0], sample_TS[1], 2*C , choice[-1]) #the first choice does not cost anything  我在这里乘2了！！
+      print('2222')
       #print(path)
       next_pull = path[0]
 
