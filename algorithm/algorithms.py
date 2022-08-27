@@ -22,14 +22,16 @@ def BM_calibration(round_holder,reward_holder,sigma=0.1):
   return var
 
 
+
 def EF(T, *arms):
-  ''''''
   """_summary_
+
+  Args:
+      T (_type_): _description_
 
   Returns:
       _type_: _description_
-  """  
-  ''''''
+  """
 
   K = len(arms)
   max_reward = np.maximum.reduce(arms)
@@ -87,7 +89,18 @@ def EF(T, *arms):
 
 
 
+
 def GPR_fit(T,model,C,*arms):
+  """_summary_
+
+  Args:
+      T (_type_): _description_
+      model (_type_): _description_
+      C (_type_): _description_
+
+  Returns:
+      _type_: _description_
+  """  
 
   choice = []
 
@@ -177,7 +190,7 @@ def GPR_fit(T,model,C,*arms):
 
 
 
-def padding(t,ti,sigma_i,sigma=0.1):
+def padding(t,ti,sigma_i,sigma=0.1):   #this is padding function of UCB_f
   return sigma*math.sqrt(8*math.log(t+1)/ti)+sigma_i*math.sqrt(8*t*math.log(t+1))
 
 
@@ -232,11 +245,13 @@ def UCB_f(T,*arms):
 
 
 
+
 def DP_pipeline(pre1, pre2, C, current_pos): 
 
   # there are two product lines: 0 and 1
   # the switching cost is C
   # we should find the best path
+  
   if len(pre1)>=2:
   
     if current_pos==0:
@@ -317,6 +332,7 @@ def DP_pipeline(pre1, pre2, C, current_pos):
 
 
 
+
 def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
 
   choice = []
@@ -385,7 +401,7 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
       next_pull = path[0]
     else:
       path = DP_pipeline(sample_TS[0], sample_TS[1], 2*C , choice[-1]) #the first choice does not cost anything  我在这里乘2了！！
-      print('2222')
+      #print('2222')
       #print(path)
       next_pull = path[0]
 
@@ -425,6 +441,7 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
 def count_switch(path):
 
   switch = 0
+  
   for i in range(1,len(path)):
     if path[i]!=path[i-1]:
       switch = switch+1

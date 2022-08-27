@@ -7,14 +7,14 @@ import math
 
 def expect_reward_generator(T,lengthscale=20,variance=2,Smooth=True,Plot=True): #this function generates the expected reward 
   
-  """_summary_
+  """this function generates the expected reward in a Gaussian process form
 
   Args:
       T (int): total time steps
       lengthscale (float,optional): _description_. Defaults to 20.
       variance (float, optional): _description_. Defaults to 2.
-      Smooth (bool, optional): _description_. Defaults to True.
-      Plot (bool, optional): _description_. Defaults to True.
+      Smooth (bool, optional): we can choose to generate a Gaussian process or a Brownian motion. Defaults to True.
+      Plot (bool, optional): whether we would like to plot the bandit process. Defaults to True.
 
   Returns:
       array:  return the bandit prceoss
@@ -46,9 +46,10 @@ def expect_reward_generator(T,lengthscale=20,variance=2,Smooth=True,Plot=True): 
   return expected_reward
 
 
-def expect_reward_generato_sin(T,period,hight,shift,Plot=True): #this function generates the expected reward 
+def expect_reward_generato_sin(T,period,hight,shift,Plot=True): 
+  
   """
-  _summary_
+  this function generates the expected reward in a sin function form
 
   Args:
       T (int): _description_
@@ -58,9 +59,9 @@ def expect_reward_generato_sin(T,period,hight,shift,Plot=True): #this function g
       Plot (bool, optional): whether to plot the arm process. Defaults to True.
 
   Returns:
-      _array:  return the bandit prceoss
-  """  ''''''
-  ''''''  
+      array:  return the bandit prceoss
+  """  
+  
   time = np.array(range(T))
   expected_reward = hight*np.sin((time+shift)/period)
 
@@ -74,14 +75,20 @@ def expect_reward_generato_sin(T,period,hight,shift,Plot=True): #this function g
 
 
 
-def reward_generator(round,expected_reward,sigma=0.1): #this function generates the reward 
-  '''
-  round is the time step
-  expected_reward is the bandit process
-  return the stochastic reward
-  '''
-  mu= expected_reward[round] 
+def reward_generator(round,expected_reward,sigma=0.1):
+  
+  """this function generates the reward 
 
+  Args:
+      round (_type_): _description_
+      expected_reward (_type_): _description_
+      sigma (float, optional): _description_. Defaults to 0.1.
+
+  Returns:
+      float: a reward
+  """  
+  
+  mu= expected_reward[round] 
   reward = float(np.random.normal(mu,sigma,1))
   
 
