@@ -7,10 +7,17 @@ from bandit_process.arm_generator import reward_generator
 
 
 def BM_calibration(round_holder,reward_holder,sigma=0.1):
+  
+  """this function is used to calibration \sigma_i in UCB_f and DTS
 
-  '''
-  this function calculates sigma_i^2
-  '''
+  Args:
+      round_holder (array): the array records the time that arm i is pulled
+      reward_holder (array): the array records the reward of arm i 
+      sigma (float, optional): the std of reward distribution. Defaults to 0.1.
+
+  Returns:
+      float: sigma^2
+  """
 
   kernel = GPy.kern.Brownian(input_dim=1)
   m = GPy.models.GPRegression(round_holder.reshape(-1,1),reward_holder.reshape(-1,1),kernel)
@@ -23,14 +30,14 @@ def BM_calibration(round_holder,reward_holder,sigma=0.1):
 
 
 
-def EF(T, *arms):
-  """_summary_
+def DTS(T, *arms):
+  """dynamic thompson sampling
 
   Args:
-      T (_type_): _description_
+      T (int): number of rounds
 
   Returns:
-      _type_: _description_
+      list: regret at each term 
   """
 
   K = len(arms)
@@ -41,14 +48,14 @@ def EF(T, *arms):
 
   mu_holder=[]
   sigma_holder=[]
-  R_holder=[] #the time that arm i has not been pulled
+  R_holder=[] 
   round_holder=[]
   reward_holder=[]
 
   for i in range(K):
     mu_holder.append(0.)
     sigma_holder.append(1.)
-    R_holder.append(1) #the time that arm i has not been pulled
+    R_holder.append(1) 
     round_holder.append([])
     reward_holder.append([])
 
@@ -61,12 +68,12 @@ def EF(T, *arms):
     for i in range(K):
       sample_TS[i]=float(np.random.normal(mu_holder[i],sigma_holder[i]*math.sqrt(R_holder[i]),1))
 
-    next_pull=np.argmax(sample_TS) #determine the next arm to pull
-    regret=max_reward[t]-arms[next_pull][t]#calculate the regret
+    next_pull=np.argmax(sample_TS)
+    regret=max_reward[t]-arms[next_pull][t]
     regret_holder[t]=regret
     
 
-    reward=reward_generator(t,arms[next_pull],sigma=0.1) #obtain the reward
+    reward=reward_generator(t,arms[next_pull],sigma=0.1) 
     mu_new=gamma**R_holder[next_pull]*mu_holder[next_pull]+(1-gamma**R_holder[next_pull])*reward
     mu_holder[next_pull]=mu_new
 
@@ -195,6 +202,14 @@ def padding(t,ti,sigma_i,sigma=0.1):   #this is padding function of UCB_f
 
 
 def UCB_f(T,*arms):
+  """_summary_
+
+  Args:
+      T (_type_): _description_
+
+  Returns:
+      _type_: _description_
+  """  
 
   choice = []
   
@@ -247,10 +262,19 @@ def UCB_f(T,*arms):
 
 
 def DP_pipeline(pre1, pre2, C, current_pos): 
+  
+  """this function calculate the strategy in Assembly Line Scheduling problem
 
-  # there are two product lines: 0 and 1
-  # the switching cost is C
-  # we should find the best path
+  Args:
+      pre1 (array or list): the future path of arm 1 
+      pre2 (array or list): the future path of arm 2
+      C (float): switching cost
+      current_pos (int): 0 (arm 1) or 1 (arm 2)
+
+  Returns:
+       list: the strategy
+  """  
+
   
   if len(pre1)>=2:
   
@@ -376,8 +400,8 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
     
 
     for i in range(K):
-      X = np.array(range(t,min(t+future_step,T+1))).reshape(-1,1) ##################
-      #print(X[0])
+      X = np.array(range(t,min(t+future_step,T+1))).reshape(-1,1) 
+    
       if TS is True:
         temp = GP_models[i].posterior_samples_f(X,size=1).reshape(-1)
        
@@ -385,29 +409,25 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
         temp,_ = GP_models[i].predict(X)
         temp = temp.reshape(-1)
         
-      #print(temp)
+     
       
       df=np.ones(len(temp))
       for j in range(len(temp)):
         df[j]=discount_factor**j
       
-      #print(df)
+     
       
       sample_TS.append(df*temp)
 
     if t==0:
       path = DP_pipeline(sample_TS[0], sample_TS[1], 0 , 1) #the first choice does not cost anything
-      #print(path)
       next_pull = path[0]
     else:
-      path = DP_pipeline(sample_TS[0], sample_TS[1], 2*C , choice[-1]) #the first choice does not cost anything  我在这里乘2了！！
-      #print('2222')
-      #print(path)
+      path = DP_pipeline(sample_TS[0], sample_TS[1], C , choice[-1]) #the first choice does not cost anything  
       next_pull = path[0]
 
 
     if t >=1 :
-
       if (next_pull != choice[-1]) : #check whether we switch the arm at time t
         switch = 1
       else:
@@ -435,7 +455,7 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
 
     GP_models[next_pull]=m
 
-  return regret_holder,choice,GP_models
+  return regret_holder,choice
 
 
 def count_switch(path):
