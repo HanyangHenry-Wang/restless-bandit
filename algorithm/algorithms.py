@@ -357,7 +357,7 @@ def DP_pipeline(pre1, pre2, C, current_pos):
 
 
 
-def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
+def GPR_DP(T,C, arm1,arm2,discount_factor=1,TS=True):
 
   choice = []
   arms=[arm1,arm2]
@@ -373,7 +373,7 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
   variance=3
 
   for i in range (K):
-    kernel1 = GPy.kern.RBF(input_dim=1,variance=variance,lengthscale=lengthscale)   #using RFP kernel
+    kernel1 = GPy.kern.RBF(input_dim=1,variance=variance,lengthscale=lengthscale)   #using RBF kernel
     m1 = GPy.models.GPRegression(X_sample,Y_sample,kernel1)
     m1.Gaussian_noise.variance.fix(0.1)
     GP_models.append(m1)
@@ -396,7 +396,7 @@ def GPR_DP(T,C, step_control, arm1,arm2,discount_factor=1,TS=True):
     l2 = float(GP_models[1].rbf.lengthscale)
 
     sample_TS=[]
-    future_step = int(min(max(5,l1),max(5,l2)))+step_control
+    future_step = int(min(max(5,l1),max(5,l2)))
     
 
     for i in range(K):
