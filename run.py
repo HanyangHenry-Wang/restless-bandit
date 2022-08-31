@@ -19,7 +19,7 @@ if __name__=='__main__':
    # run_experiment.experiment3.exp3()
    # run_experiment.experiment4.exp4()
    # run_experiment.experiment5.exp5()
-   run_experiment.experiment5.exp6()
+   run_experiment.experiment6.exp6()
   
     
 
