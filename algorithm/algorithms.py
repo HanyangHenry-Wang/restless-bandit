@@ -467,3 +467,93 @@ def count_switch(path):
       switch = switch+1
 
   return switch
+
+
+
+
+def GPR_generalTS2(T,C, arm1,arm2,control=1):
+
+  choice = []
+  arms=[arm1,arm2]
+  max_reward = np.maximum.reduce(arms)
+  K = 2
+
+  X_sample=np.array([[0.0]])
+  Y_sample=np.array([[0.0]])
+
+  GP_models = []
+
+  lengthscale=6
+  variance=3
+
+  for i in range (K):
+    kernel1 = GPy.kern.RBF(input_dim=1,variance=variance,lengthscale=lengthscale)   #using RBF kernel
+    m1 = GPy.models.GPRegression(X_sample,Y_sample,kernel1)
+    m1.Gaussian_noise.variance.fix(0.1)
+    GP_models.append(m1)
+
+  l1 = float(GP_models[0].rbf.lengthscale)
+  l2 = float(GP_models[1].rbf.lengthscale)
+
+  round_holder= []    
+  reward_holder= []    
+  
+  for i in range(2):
+    round_holder.append([])
+    reward_holder.append([])
+
+  regret_holder=np.zeros(T)
+
+  for t in range(T):
+
+    l1 = float(GP_models[0].rbf.lengthscale)
+    l2 = float(GP_models[1].rbf.lengthscale)
+
+    sample_TS=[]
+    future_step = int(min(max(5,l1),max(5,l2)))
+    
+
+    for i in range(K):
+      X = np.array(range(t,min(t+future_step,T+1))).reshape(-1,1) 
+
+      mean_temp,cov_temp =  GP_models[i].predict(X,full_cov=True,include_likelihood=False)
+      temp = np.random.multivariate_normal(mean_temp.reshape(-1,), control*cov_temp, 1).reshape(-1)    
+      sample_TS.append(temp)
+
+    if t==0:
+      path = DP_pipeline(sample_TS[0], sample_TS[1], 0 , 1) #the first choice does not cost anything
+      next_pull = path[0]
+    else:
+      path = DP_pipeline(sample_TS[0], sample_TS[1], C , choice[-1]) #the first choice does not cost anything  
+      next_pull = path[0]
+
+
+    if t >=1 :
+      if (next_pull != choice[-1]) : #check whether we switch the arm at time t
+        switch = 1
+      else:
+        switch = 0
+    else:
+      switch = 0
+
+    regret=max_reward[t]-arms[next_pull][t]#calculate the regret
+    regret_holder[t]=regret+switch*C
+
+    reward=reward_generator(t,arms[next_pull],sigma=0.1) #obtain the reward
+
+    round_holder[next_pull].append(t)
+    reward_holder[next_pull].append(reward)
+    choice.append(next_pull)
+
+    X_sample= np.array(round_holder[next_pull]).reshape(-1,1)     
+    Y_sample=np.array(reward_holder[next_pull]).reshape(-1,1)
+    
+
+    kernel = GPy.kern.RBF(input_dim=1,variance=variance,lengthscale=lengthscale)
+    m = GPy.models.GPRegression(X_sample,Y_sample,kernel)
+    m.Gaussian_noise.variance.fix(0.1)
+    m.optimize()
+
+    GP_models[next_pull]=m
+
+  return regret_holder,choice
