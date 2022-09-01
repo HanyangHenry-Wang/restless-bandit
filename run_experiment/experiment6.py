@@ -8,9 +8,9 @@ control_holder = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0 ]
 
 for ctrl in control_holder:
     
-    T = 100
-    N = 1
-    C = 0.75
+    T = 200
+    N = 250
+    C = 0.25
 
         
     regret_holder = []
@@ -33,5 +33,5 @@ for ctrl in control_holder:
     regret_record = np.array(regret_holder).reshape(N,T)  
     choice_record = np.array(choice_holder).reshape(N,T)  
 
-    np.savetxt('TEMP/GeneralTS_SC0.75_control'+str(ctrl)+'.csv', regret_record, delimiter=',')
-    np.savetxt('TEMP/choice_GeneralTS_SC0.75_control'+str(ctrl)+'.csv', choice_record, delimiter=',')
+    np.savetxt('TEMP/GeneralTS_SC0.25_control'+str(ctrl)+'.csv', regret_record, delimiter=',')
+    np.savetxt('TEMP/choice_GeneralTS_SC0.25_control'+str(ctrl)+'.csv', choice_record, delimiter=',')
