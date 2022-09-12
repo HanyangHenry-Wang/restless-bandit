@@ -420,8 +420,7 @@ def GPR_DP(T,C, arm1,arm2,discount_factor=1,TS=True):
       sample_TS.append(df*temp)
 
     if t==0:
-      path = DP_pipeline(sample_TS[0], sample_TS[1], 0 , 1) #the first choice does not cost anything
-      next_pull = path[0]
+      next_pull = np.random.randint(0,2)       #randomly pick one arm at the first step
     else:
       path = DP_pipeline(sample_TS[0], sample_TS[1], C , choice[-1]) #the first choice does not cost anything  
       next_pull = path[0]
