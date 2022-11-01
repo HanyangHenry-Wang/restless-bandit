@@ -52,7 +52,7 @@ def expect_reward_generato_sin(T,period,hight,shift,Plot=True):
   this function generates the expected reward in a sin function form
 
   Args:
-      T (int): _description_
+      T (int):total time steps
       period (float): one parameter in the sin function
       hight (float): one parameter in the sin function
       shift (float): one parameter in the sin function
@@ -80,9 +80,9 @@ def reward_generator(round,expected_reward,sigma=0.1):
   """this function generates the reward 
 
   Args:
-      round (_type_): _description_
-      expected_reward (_type_): _description_
-      sigma (float, optional): _description_. Defaults to 0.1.
+      round (_type_): time step
+      expected_reward (_type_): expected_reward 
+      sigma (float, optional): sigma. Defaults to 0.1.
 
   Returns:
       float: a reward
