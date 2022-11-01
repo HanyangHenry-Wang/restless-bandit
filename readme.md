@@ -13,6 +13,7 @@ along with dynamic programming is utilized. The empirical results show that we s
 exploration when the switching cost is high.
 
 ## Installation
+Our python version is 3.9.7.
 ```bash
 git clone https://github.com/HanyangHenry-Wang/restless-bandit.git && cd restless-bandit
 pip install -r requirements.txt --upgrade
