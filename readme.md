@@ -23,3 +23,7 @@ pip install -e .
 
 ## Data and figures
 The experiments are done in experiment.ipynb and new_experiments.ipynb. The results of experiments are stored in "result" and "new result" file.
+```
+restless bandit problem demo1.ipynb
+```
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1KcsnYheCiQSuStYQolPScK2jTobWYHt6)
